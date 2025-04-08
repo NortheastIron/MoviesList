@@ -1,0 +1,130 @@
+.app-movies-item-edit-form {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+
+    &__content {
+        overflow-y: auto;
+        overflow-x: clip;
+        padding: 0 25px;
+        // .edit-image {}
+
+        &.loading {
+            opacity: 0.3;
+            pointer-events: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .edit-table {
+            display: -ms-grid;
+            display: grid;
+            gap: 10px 20px;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: -webkit-min-content;
+            grid-auto-rows: min-content;
+
+            &__title {
+                .required {
+                    position: relative;
+                }
+            
+                .required::after {
+                    content: '*';
+                    position: absolute;
+                    bottom: 0;
+                    right: -6px;
+                    color: #ff0000;
+                }
+            }
+
+            &__value {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                min-width: 0;
+
+                &__cont {
+                    -webkit-box-flex: 1;
+                    -ms-flex: 1 1 auto;
+                    flex: 1 1 auto;
+                    width: 245px;
+                    max-width: 245px;
+
+                    .custom-input-remove-box {
+                        position: relative;
+                        margin-bottom: 10px;
+
+                        .remove-button {
+                            position: absolute;
+                            top: 4px;
+                            right: -25px;
+                        };
+
+                        .disabled {
+                            cursor: initial;
+                            color: rgba(16, 16, 16, 0.3);
+                        }
+                    }
+
+                    .plus-button {
+                        background-color: #d1d1d1;
+                    }
+
+                    &.personal-assessment-edit-box {
+                        .control-button {
+                            i::before {
+                                font-size: 16px;
+                            }
+                        }
+
+                        .control-button:not(:last-child) {
+                            margin-right: 20px;
+                        }
+
+                        .icon-emo-unhappy {
+                            color: #ff0000;
+                        }
+        
+                        .icon-emo-happy {
+                            color: #008000;
+                        }
+
+                        .enabled {
+                            background-color: #fae3b6;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &__footer {
+        padding: 10px 20px 20px 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+
+        .action-button {
+            height: 32px;
+            margin-right: 10px;
+        }
+
+        .action-button:last-child {
+            margin-right: 0;
+        }
+    }
+
+    
+}

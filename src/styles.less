@@ -1,0 +1,72 @@
+@import url('./assets/styles/fontello/css/fontello.css');
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+*, *:after, *:before {
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+.action-button {
+    padding: 0 10px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 600;
+    background-color: #ccc;
+
+    i.icon {
+        font-size: 12px;
+        margin-left: 3px;
+    }
+
+    &.disabled {
+        background-color: #e8e8e8;
+        color: #999;
+        cursor: initial;
+    }
+}
+
+.control-button {
+    border: none;
+    border-radius: 50%;
+    background-color: inherit;
+
+    i::before {
+        font-size: 14px;
+        line-height: 24px;
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.input-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.input-icon::before {
+    width: 32px;
+    height: 32px;
+    // text-align: center;
+    line-height: 32px;
+    font-size: 16px;
+}
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,16 @@
+<div class="app-modal">
+
+    <div class="app-modal__popup">
+        <div class="app-modal__popup__header">
+            <div class="app-modal__popup__header__title">{{appTitle}}</div>
+            <div class="app-modal__popup__header__buttons">
+                <button class="control-button" (click)="onClose()"><i class="icon-cancel"></i></button>
+            </div>
+        </div>
+        <div class="app-modal__popup__content">
+            <ng-content></ng-content>
+        </div>
+
+    </div>
+
+</div>

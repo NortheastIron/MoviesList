@@ -1,0 +1,4 @@
+<div class="app-input-search">
+    <input placeholder="Input text..." [ngModel]="value" (ngModelChange)="onValueChange($event)">
+    <i class="input-icon icon-search" (click)="onSearch(value)"></i>
+</div>

@@ -1,0 +1,56 @@
+<div class="app-movies-page">
+    <!-- buttons -->
+    <div class="app-movies-page__buttons">
+        <!-- need validation or disabled -->
+        <button class="action-button" (click)="!loading && openAddUpdateItemForm()">Add Movie</button>
+        <button class="action-button" (click)="isFilters = !isFilters">
+            Filters<i class="icon" [ngClass]="{'icon-down-open': !isFilters, 'icon-up-open': isFilters}"></i>
+        </button>
+    </div>
+    <!-- filters -->
+    <div *ngIf="isFilters" class="app-movies-page__filters">
+        <div>
+            <app-input-search [(value)]="filters.inputSearch.inputVal"
+                              [minLength]="3"
+                              (appEvents)="inputSearchEvents($event)">
+            </app-input-search>
+        </div>
+        <div>
+            <!-- genre -->
+            <app-select [appPlaceholder]="selectGenrePlaceholder"
+                        [(value)]="filters.genre"
+                        [dicts]="genres"
+                        (appEvents)="selectedEvents($event)">
+            </app-select>
+        </div>
+        <div>
+        <!-- createYear ... -->
+            <app-datepicker [appPlaceholder]="datePicCreateYearPlaceholder"
+                            [type]="datePickerTypesEnum.year"
+                            [(value)]="filters.createYear"
+                            (appEvents)="calendarEvents($event)">
+            </app-datepicker>
+        </div>
+
+        <div>
+            <!-- add or update ... по хорошему надо создать селект внутри датапикера чтобы выбирать нужную фильтрацию -->
+                <app-datepicker [appPlaceholder]="datePicAddUpPlaceholder"
+                                [type]="datePickerTypesEnum.all"
+                                [(value)]="filters.addUpdateDate"
+                                (appEvents)="calendarEvents($event)">
+                </app-datepicker>
+            </div>
+    </div>
+    <!-- list -->
+    <div class="app-movies-page__list" *ngIf="!loading">
+        <div class="app-movies-page__list__item" *ngFor="let item of movies; let i = index">
+            <app-movies-item  [movie]="item" (appEvents)="receiveItemEvents($event)"></app-movies-item>
+        </div>
+    </div>
+
+    <!-- есть идея сделать создания модалки через рендер, но пока пусть будет так -->
+    <!-- модальное окно для создания и редактирования фильмов -->
+    <app-modal [appTitle]="formState?.title!" *ngIf="isformVisible" (appEvents)="modalEventsHandler($event)">
+        <app-movies-item-edit-form [id]="formState?.id" (appEvents)="editFormEventsHandler($event)"></app-movies-item-edit-form>
+    </app-modal>
+</div>

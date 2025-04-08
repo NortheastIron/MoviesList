@@ -1,0 +1,204 @@
+.app-datepicker {
+    position: relative;
+    
+    input {
+        height: 32px;
+        width: 100%;
+        line-height: 30px;
+        border: 1px #c3c3c3 solid;
+        border-radius: 3px;
+        padding: 0 25px 0 10px;
+        outline: 0;
+        background: initial;
+        font-size: 16px;
+    }
+
+    &__calendar-cont {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 10px 0;
+        width: 100%;
+        max-width: 245px;
+        border-radius: 4px;
+        background-color: #fff;
+        -webkit-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
+
+        &__header {
+            height: 32px;
+            position: relative;
+
+            &__info {
+                height: 100%;
+                width: 100%;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                padding: 0 32px 0 32px;
+                gap: 5px;
+
+                .calendar-info-box {
+                    min-width: 28px;
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    justify-content: center;
+                    height: 100%;
+                    padding: 0 5px;
+                    cursor: pointer;
+                    border: 1px #c3c3c3 solid;
+                    font-size: 16px;
+                    border-radius: 4px;
+                }
+
+                .calendar-info-box:hover {
+                    background-color: #e5e5e5;
+                }
+
+                &.single-box {
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    justify-content: center;
+                }
+
+                &.multi-box {
+                    -webkit-box-pack: justify;
+                    -ms-flex-pack: justify;
+                    justify-content: space-between;
+                }
+            }
+
+            .app-datepicker-header-icon {
+                cursor: pointer;
+                position: absolute;
+                top: 0;
+            }
+
+            .app-datepicker-header-icon::before {
+                width: 32px;
+                height: 32px;
+                text-align: center;
+                line-height: 32px;
+                font-size: 12px;
+            }
+            
+
+            .icon-left-open {
+                left: 0;
+            }
+
+            .icon-right-open {
+                right: 0;
+            }
+        }
+
+        &__main {
+            position: relative;
+            width: 100%;
+            padding: 10px 0;
+            display: -ms-grid;
+            display: grid;
+            gap: 0;
+
+            &.date-mode {
+                grid-template-columns: repeat(8, 1fr);
+
+                .calendar-main-box {
+                    line-height: 20px;
+                    min-width: 23px;
+                    height: 20px;
+                }
+
+                .calendar-main-box:nth-child(8n) {
+                    border-right: none;
+                }
+
+                .calendar-main-box:nth-last-child(-n+8) {
+                    border-bottom: none;
+                }
+            }
+
+            &.year-month-mode {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+
+                .calendar-main-box {
+                    line-height: 24px;
+                    height: 24px;
+                    
+                }
+
+                .calendar-main-box:nth-child(4n) {
+                    border-right: none;
+                }
+
+                .calendar-main-box:nth-last-child(-n+4) {
+                    border-bottom: none;
+                }
+            }
+
+            .calendar-main-box {
+                text-align: center;
+                overflow: hidden;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                border-right: 1px #c3c3c3 solid;
+                border-bottom: 1px #c3c3c3 solid;
+            }
+
+            .calendar-main-box-another {
+                background-color: #e5e5e5;
+            }
+
+            .calendar-main-box-hover:hover {
+                background-color: #c2c2c2;
+            }
+
+            .calendar-main-box-pointer {
+                cursor: pointer;
+            }
+
+            .calendar-main-box-enabled {
+                background-color: #d1b38c !important;
+            }
+
+            .calendar-main-box-today {
+                background-color: antiquewhite;
+            }
+        }
+        // мб как то по другому назвать всётаки
+        .calendar-box-enabled {
+            background-color: antiquewhite;
+        }
+
+        &__footer {
+            padding: 0 10px;
+
+            .action-button {
+                height: 32px;
+                margin-right: 10px;
+            }
+
+            .action-button:last-child {
+                float:inline-end;
+                margin-right: 0;
+            }
+        }
+    }
+}

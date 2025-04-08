@@ -1,0 +1,22 @@
+<div class="app-custom-range">
+    <input type="range"
+           min="0"
+           max="10"
+           step="0.1"
+           [ngModel]="value"
+           (ngModelChange)="onValueChange($event)"
+           (input)="updatePopup($event)"
+           (touchstart)="startDragging($event)"
+           (touchmove)="updatePopup($event)"
+           (touchend)="stopDragging()"
+           (mouseup)="stopDragging()"
+           (mousedown)="startDragging($event)">
+
+    <!-- можно будет сделать отдельную компоненту для мини подсказок -->
+    <div class="app-custom-range__popup"
+        *ngIf="isDragging"
+        [style.left.px]="popupPosition.x"
+        [style.top.px]="popupPosition.y">
+        {{ value | number:'1.1-1' }}
+      </div>
+</div>

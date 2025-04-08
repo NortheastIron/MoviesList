@@ -1,0 +1,14 @@
+<div class="app-select" (click)="onPopup(true)" appClickOutside (clickOutside)="onPopup(false)">
+    <input [placeholder]="appPlaceholder" readonly [ngModel]="inputText">
+    <i class="input-icon icon-calendar"
+       [ngClass]="{'icon-down-open': !isVisiblePopup, 'icon-up-open': isVisiblePopup}">
+    </i>
+
+    <app-popup *ngIf="isVisiblePopup" [maxHeight]="200" [minHeight]="64" [parentRef]="elementRef">
+        @for(dict of dicts; track $index) {
+            <div class="app-select__item" [ngClass]="{'selected': dict.key === value}" (click)="onSelected(dict)">
+                {{dict.name}}
+            </div>
+        }
+    </app-popup>
+</div>

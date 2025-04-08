@@ -1,0 +1,23 @@
+<div class="app-datepicker" appClickOutside (clickOutside)="onCloseCalendar()">
+    <input placeholder="{{appPlaceholder}}" readonly [ngModel]="inputText">
+    <i class="input-icon icon-calendar" (click)="onCalendar()"></i>
+
+    <app-popup *ngIf="calendarIsVisible" [parentRef]="elementRef">
+        <div #datepickerCalendarElement class="app-datepicker__calendar-cont">
+            <div class="app-datepicker__calendar-cont__header">
+                <i class="app-datepicker-header-icon icon-left-open" (click)="onPrev()"></i>
+                <div class="app-datepicker__calendar-cont__header__info">
+                </div>
+                <i class="app-datepicker-header-icon icon-right-open" (click)="onNext()"></i>
+            </div>
+            <div class="app-datepicker__calendar-cont__main">
+    
+            </div>
+            <div class="app-datepicker__calendar-cont__footer">
+                <button class="action-button" (click)="onToday()">Today</button>
+                <button class="action-button" (click)="onReset()">Reset</button>
+                <button class="action-button" (click)="onCloseCalendar()">Close</button>
+            </div>
+        </div>
+    </app-popup>
+</div>

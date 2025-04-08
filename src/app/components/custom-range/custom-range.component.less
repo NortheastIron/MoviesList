@@ -1,0 +1,38 @@
+.app-custom-range {
+    display: -webkit-box;
+    display: -ms-flexbox;  
+    display: flex;
+    height: 32px;
+    position: relative;
+
+    input {
+        width: 100%;
+        accent-color: #595959;
+    }
+
+    &__popup {
+        position: fixed;
+        background: #333333;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        -webkit-transform: translate(-50%, -100%);
+        -ms-transform: translate(-50%, -100%);
+        transform: translate(-50%, -100%);
+      }
+  
+      &__popup:after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        border-width: 8px 6px 0;
+        border-style: solid;
+        border-color: #333 transparent transparent;
+      }
+} 
