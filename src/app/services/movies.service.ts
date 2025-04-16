@@ -1,10 +1,28 @@
 import { Injectable } from "@angular/core";
+import {
+    BehaviorSubject,
+    Observable,
+    catchError,
+    defer,
+    delay,
+    distinctUntilChanged,
+    finalize,
+    of,
+    switchMap,
+    take,
+    takeUntil,
+    tap,
+    throwError
+} from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-import { TCollectionParams,
-         TFilter,
-         TMovies,
-         TMoviesAdd,
-         TMoviesUpdate
+
+import { 
+    TCollectionParams,
+    TFilter,
+    TMovies,
+    TMoviesAdd,
+    TMoviesUpdate
 } from "./types";
 import { typedFastCopy } from "../utils";
 
@@ -24,23 +42,105 @@ export interface IMoviesService {
     providedIn: 'root'
 })
 export class MoviesService implements IMoviesService {
-    private _ready: boolean = false;
+    // private _ready: boolean = false;
+    // public readonly movies$: Observable<TMovies[]>;
+
+    
     private _movies: TMovies[] = [];
+
     private _apiUrl = 'assets/data.json';
+    private _moviesSubject$ = new BehaviorSubject<TMovies[]>([]);
+    private _isLoading$ = new BehaviorSubject<boolean>(false); // нужно ли
 
-    constructor() {
+    // public 
 
+    constructor(private _http: HttpClient) {
+        console.log('mov serv constr');
+        // this.movies$ = this._moviesSubject.asObservable().pipe(
+        //     distinctUntilChanged((prev, curr) => 
+        //         JSON.stringify(prev) === JSON.stringify(curr)
+        //     )
+        // );
+
+        this._initService();
     }
 
-    public init() {
-        return fetch(this._apiUrl).then(
-            res => res.json()
-        ).then(res2 => {
-            this._movies = res2;
-        }).catch(err => {
-            this._movies = [];
-        });
+    public get isLoading$(): Observable<boolean> {
+        return this._isLoading$.asObservable();
     }
+
+    public get movies$(): Observable<TMovies[]> {
+        return this._moviesSubject$.asObservable().pipe(
+            distinctUntilChanged((prev, curr) =>
+                JSON.stringify(prev) === JSON.stringify(curr)
+            )
+        );
+    }
+
+    public removeMovie(id: number): Observable<boolean> {
+        this._isLoading$.next(true);
+
+        return defer(() => {
+            const isInclude = this._moviesSubject$.value.some(movie => movie.id === id);
+
+            if (!isInclude) {
+                console.log('net id');
+                return throwError(() => new Error('Id not found'));
+            }
+
+            return of(true).pipe(
+                delay(600),
+                tap(() => {
+                    const updatedList = this._moviesSubject$.value.filter(movie => movie.id !== id);
+                    this._moviesSubject$.next(updatedList);
+                })
+            );
+        }).pipe(
+            catchError(err => {
+                //exp тут можно будет добавить какую то работу с ошибками?
+                return of(false);
+            }),
+            finalize(() => this._isLoading$.next(false))
+        );
+    }
+
+    // public isLoading(): boolean {
+    //     return this.isReady$
+    // }
+
+    private _initService(): void {
+        this._isLoading$.next(true);
+        this._http.get<TMovies[]>(this._apiUrl, {
+            headers: new HttpHeaders({
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+              })
+        }).pipe(
+            delay(1000),
+            tap(value => {
+                this._moviesSubject$.next(value);
+                // this._isReady$.next(true);
+            }),
+            catchError(_error => {
+                this._moviesSubject$.next([]);
+                // this._isReady$.next(true);
+                return of([]);
+            }),
+            finalize(() => {
+                this._isLoading$.next(false);
+            })
+        ).subscribe();
+    }
+
+    // public init(): Promise<void> {
+    //     return fetch(this._apiUrl).then(
+    //         res => res.json()
+    //     ).then(res2 => {
+    //         this._movies = res2;
+    //     }).catch(err => {
+    //         this._movies = [];
+    //     });
+    // }
 
     public list(collectionParams: TCollectionParams = {}): Promise<TMovies[]> {
         const filters: TFilter = collectionParams.filters ?? {};
@@ -51,6 +151,10 @@ export class MoviesService implements IMoviesService {
             filteredMovies = this._doFiltration(filteredMovies, filters);
             resolve(filteredMovies);
         });
+    }
+
+    public list2(): Observable<TMovies[]> {
+        return of(this._movies);
     }
 
     public get(id: number): Promise<TMovies> {

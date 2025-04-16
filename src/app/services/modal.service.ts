@@ -12,11 +12,12 @@ export interface IModalService {
 })
 export class ModalService implements IModalService {
 
-  public readonly isVisible$: Observable<boolean>;
   private _isVisible$ = new BehaviorSubject<boolean>(false);
 
-  constructor() {
-    this.isVisible$ = this._isVisible$.asObservable();
+  constructor() {}
+
+  public get isVisible$(): Observable<boolean> {
+    return this._isVisible$.asObservable();
   }
 
   public open(): void {

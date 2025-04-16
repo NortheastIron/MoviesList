@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 
 import { AppEvents, MoviesService, TAppEvents, TMovies } from '../../services';
 import { MoviesItemComponent } from '../../components/movies-item/movies-item.component';
@@ -70,12 +70,21 @@ export class MoviesPageComponent implements OnInit, OnDestroy {
     genre: ''
   };
   protected formState: TFormState | null = null;
-  protected isformVisible: boolean = false;
+  // protected isformVisible: boolean = false;
   protected datePickerTypesEnum = DatePickerTypes;
-  private _modalSubscription: Subscription | undefined;
+
   protected datePicCreateYearPlaceholder: string = 'Select year of creation...';
   protected datePicAddUpPlaceholder: string = 'Select date added or up...';
   protected selectGenrePlaceholder: string = 'Select genre...';
+
+  protected movies$ = this._moviesService.movies$;
+  protected isLoading$ = this._moviesService.isLoading$;
+  protected isVisibleModal$ = this._modalService.isVisible$;
+
+  // private _modalSubscription: Subscription | undefined;
+  // private destroy$ = new Subject<void>(); //отписаться от потока в takeUntil
+
+  // private _subs: Subscription = new Subscription();
 
 // задаю прямо, по хорошему нужно получать список жанров с бека учитывая сущестующие значения 
   protected genres: TDict[] = [
@@ -88,24 +97,40 @@ export class MoviesPageComponent implements OnInit, OnDestroy {
     {key: GenresEnum.historical, name: 'Historical'}
   ];
 
-  constructor(private _moviesService: MoviesService, private readonly _modalService: ModalService) {}
+  constructor(private _moviesService: MoviesService, private readonly _modalService: ModalService) {
+    console.log('mov page constr');
+  }
 
   public ngOnDestroy(): void {
-    this._modalSubscription?.unsubscribe();
+    // this.destroy$.next();
+    // this.destroy$.complete();
+    // this._modalSubscription?.unsubscribe();
+    // this._subs.unsubscribe();
   }
 
   public ngOnInit(): void {
-    this.loading = true;
+    console.log('mov page ngoninit');
+    // this.loading = true;
     //т.к. бэк не прикручен, жду файл а потом работаю с массивом
-    this._moviesService.init().then(() => {
-      this._load();
-    });
+    // this._moviesService.testHttp().subscribe({
+    //   next: movies => {
+    //     console.log('mov', movies);
+    //   },
+    //   error: () => {
+    //     console.log('err');
+    //   }
+    // });
+    // this._moviesService.init().then(() => {
+    //   this._load();
+    // });
 
-    this._modalSubscription = this._modalService.isVisible$.subscribe({
-      next: (value: boolean) => {
-        this.isformVisible = value;
-      }
-    });
+    // this._subs.add(
+    //   this._modalService.isVisible$.subscribe({
+    //     next: (value: boolean) => {
+    //       this.isformVisible = value;
+    //     }
+    //   })
+    // );
   }
 
   // TAppEvents ... решение в лоб ... по хорошему нужно сделать сервис
