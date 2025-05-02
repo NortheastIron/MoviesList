@@ -1,0 +1,1 @@
+export { MoviesPageEditFormComponent } from './movies-page.edit-form.component';

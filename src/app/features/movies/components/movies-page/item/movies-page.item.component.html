@@ -1,0 +1,53 @@
+<div class="app-movies-page-item">
+    <div class="app-movies-page-item__image-cont">
+        <div class="app-movies-page-item__image-cont__image"> TEST</div>
+    </div>
+    <div class="app-movies-page-item__content">
+<!-- chtoto || '---' ... нужно сделать пайп -->
+        <div class="app-movies-page-item__content__title">
+            <div class="app-movies-page-item__content__title__str1 title-str">{{movie.name}}</div>
+            <div class="app-movies-page-item__content__title__str2 title-str">{{movie.year || '---'}}</div>
+            <div class="app-movies-page-item__content__title__str3 title-str">
+                <span class="app-movies-page-item__content__title__str3__genre">{{movie.genre || '---'}}</span>
+                <span class="app-movies-page-item__content__title__str3__director">Director: {{movie.director || '---'}}</span>
+            </div>
+            <div class="app-movies-page-item__content__title__str4 title-str">
+                <span class="app-movies-page-item__content__title__str4__actors">
+                    <span>Actors: </span>
+                    @if(movie.actors.length > 0) {
+                        @for(actor of movie.actors; track $index) {
+                                {{actor}}<span *ngIf="!$last">,</span>
+                        }
+                    } @else {
+                        ---
+                    }
+                </span>
+                <span class="hidden-rate">Rate: {{movie.rating || '---'}}</span>
+            </div>
+            <div class="app-movies-page-item__content__title__str5">
+                <button class="action-button details-button" (click)="onDetails()">Details</button>
+            </div>
+        </div>
+        <div class="app-movies-page-item__content__secondary">
+            <div class="app-movies-page-item__content__secondary__rate">
+                <span>Rate: {{movie.rating || '---'}}</span>
+            </div>
+            <!-- личная оценка ... положительно , отрицательно или не смотрел, но можно добавить ещё 2-3 варианта -->
+            <div class="app-movies-page-item__content__secondary__personal">
+                <i class="reaction-icon" [ngClass]="{
+                    'icon-emo-happy': movie.personalAssessment === 1,
+                    'icon-emo-sleep': movie.personalAssessment === 0,
+                    'icon-emo-unhappy': movie.personalAssessment === 2     
+                }"></i>
+            </div>
+            <div class="app-movies-page-item__content__secondary__slogan" *ngIf="movie.slogan">
+                <span>{{movie.slogan}}</span>
+            </div>
+        </div>
+        <div class="app-movies-page-item__content__actions">
+            <button class="control-button" (click)="onEdit()"><i class="icon-pencil"></i></button>
+            <button class="control-button" (click)="onDelete()"><i class="icon-cancel"></i></button>
+        </div>
+    </div>
+</div>
+

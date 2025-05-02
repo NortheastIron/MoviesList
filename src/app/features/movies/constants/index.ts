@@ -1,0 +1,1 @@
+export { GENRES_DICT } from './genres.conts';

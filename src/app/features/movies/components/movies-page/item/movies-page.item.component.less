@@ -1,0 +1,203 @@
+@media screen and (max-width: 1000px) {
+    .app-movies-page-item {
+        &__content {
+            grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) auto !important;
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .app-movies-page-item {
+        &__content {
+            grid-template-columns: minmax(0, 4fr) minmax(0, 1fr) auto !important;
+
+            &__secondary__slogan {
+                display: none !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .app-movies-page-item {
+        &__content {
+            grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) auto !important;
+
+            &__secondary__slogan,
+            &__title__str3__director,
+            &__title__str3__genre::after,
+            &__title__str4__actors {
+                display: none !important;
+            }
+
+            .hidden-rate {
+                visibility: hidden;
+                display: inline !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 535px) {
+    .app-movies-page-item {
+        &__content {
+            grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) !important;
+
+            &__secondary,  
+            &__secondary__rate {
+                display: none !important;
+            }
+
+            .hidden-rate {
+                visibility:inherit
+            }
+        }
+    }
+}
+
+
+.app-movies-page-item {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #B1B7B7;
+    border-radius: 8px;
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: 72px auto;
+    gap: 15px;
+
+    &__image-cont {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+                align-items: center;
+        // временное имя
+        &__image {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+                    align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                    justify-content: center;
+            color: #fff;
+            height: 108px;
+            width: 72px;
+            background-color: #FF9E73;
+        }
+    }
+
+    &__content {
+        display: -ms-grid;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        gap: 20px;
+
+        &__title {
+            // str<num> временные имена)
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            gap: 4px;
+
+            &__str1 {
+                font-weight: 600;
+            }
+    
+            &__str2 {
+            }
+
+            &__str3 {
+                &__genre::after {
+                    content: " • "
+                }
+            }
+
+            &__str4 {
+                white-space: nowrap;
+                overflow: hidden;
+                -o-text-overflow: ellipsis;
+                   text-overflow: ellipsis;
+
+                .hidden-rate {
+                    display: none;
+                }
+            }
+    
+            &__str5 {
+                .action-button {
+                    height: 20px;
+                    font-size: 12px;
+                }
+            }
+    
+            .title-str {
+                white-space: nowrap;
+                overflow: hidden;
+                -o-text-overflow: ellipsis;
+                   text-overflow: ellipsis;
+            }
+        }
+
+        &__secondary {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-flow: column;
+                flex-flow: column;
+            gap: 4px;
+
+            &__rate {}
+
+            &__slogan {
+                height: 18px;
+                white-space: nowrap;
+                overflow: hidden;
+                -o-text-overflow: ellipsis;
+                   text-overflow: ellipsis;
+            }
+
+            &__personal {
+                .reaction-icon {
+                    line-height: 41px;
+                }
+
+                .reaction-icon::before {
+                    font-size: 16px;
+                }
+
+                .icon-emo-unhappy {
+                    color: #ff0000;
+                }
+
+                .icon-emo-happy {
+                    color: #008000;
+                }
+            }
+        }
+    
+        &__actions {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+            align-items: flex-start;
+            -webkit-box-pack: end;
+            -ms-flex-pack: end;
+            justify-content: flex-end;
+        }
+    }
+
+
+}

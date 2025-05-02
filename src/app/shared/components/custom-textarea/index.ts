@@ -1,0 +1,1 @@
+export { CustomTextareaComponent } from './custom-textarea.component';

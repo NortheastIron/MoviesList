@@ -1,0 +1,1 @@
+export { typedFastCopy } from './typed-fast-copy.util';
