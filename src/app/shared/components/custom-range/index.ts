@@ -1,0 +1,1 @@
+export { CustomRangeComponent } from './custom-range.component';

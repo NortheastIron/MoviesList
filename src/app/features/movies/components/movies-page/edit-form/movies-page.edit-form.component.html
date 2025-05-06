@@ -1,0 +1,138 @@
+<div class="app-movies-page-edit-form">
+    <!-- footer по хорошему должны быть в компоненте модалки -->
+    <div class="app-movies-page-edit-form__content" [class.disabled]="isLoading">
+        <!-- <div class="edit-image">
+            <div class="edit-image__image"> TEST</div>
+        </div> -->
+        <div class="edit-table">
+            <div class="edit-table__title">
+                <span class="required">Name</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <app-custom-input [(value)]="movie.name!" [appPlaceholder]="nameInputPlaceholder">
+                    </app-custom-input>
+                </div>
+            </div>
+
+            <!-- можно будет сделать мультиселект и несколько жанров для одного фильма -->
+            <div class="edit-table__title">
+                <span class="required">Genre</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <app-select [appPlaceholder]="selectGenrePlaceholder"
+                        [(value)]="movie.genre!"
+                        [dicts]="genres">
+                    </app-select>
+                </div>
+
+            </div>
+
+            <div class="edit-table__title">
+                <span class="required">Director</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <app-custom-input [(value)]="movie.director!" [appPlaceholder]="directorInputPlaceholder">
+                    </app-custom-input>
+                </div>
+
+            </div>
+
+            <div class="edit-table__title">
+                <span class="required">Actors</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    @for (actor of movie.actors; track $index) {
+                        <div class="custom-input-remove-box">
+                            <app-custom-input [(value)]="movie.actors![$index]" [appPlaceholder]="actorNameInputPlaceholder">
+                            </app-custom-input>
+                            <button class="remove-button control-button"
+                                    [ngClass]="{'disabled': isLastItemMovieProperty('actors')}"
+                                    (click)="!isLastItemMovieProperty('actors') && removeActorStr($index)">
+                                <i class="icon-cancel"></i>
+                            </button>
+                        </div>
+                    }
+                    <button class="plus-button control-button" (click)="addActorStr()">
+                        <i class="icon-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="edit-table__title">
+                <span>Year</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <app-datepicker [appPlaceholder]="datePicYearPlaceholder"
+                        [type]="datePickerTypesEnum.year"
+                        [(value)]="movie.year!">
+                    </app-datepicker>
+                </div>
+
+            </div>
+
+            <div class="edit-table__title">
+                <span>Rating</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <!-- <input type="range" [ngModel]="movie.rating" min="0" max="10"> -->
+                    <app-custom-range [(value)]="movie.rating!"></app-custom-range>
+                </div>
+                <!-- Тута должен быть типо мини скрол -->
+            </div>
+
+            <div class="edit-table__title">Personal Assessment</div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont personal-assessment-edit-box">
+                    <button class="control-button"
+                            [ngClass]="{'enabled': movie.personalAssessment === 1}"
+                            (click)="onPersonalAssessment(1)">
+                        <i class="icon-emo-happy"></i>
+                    </button>
+                    <button class="control-button"
+                            [ngClass]="{'enabled': movie.personalAssessment === 0}"
+                            (click)="onPersonalAssessment(0)">
+                        <i class="icon-emo-sleep"></i>
+                    </button>
+                    <button class="control-button"
+                            [ngClass]="{'enabled': movie.personalAssessment === 2}"
+                            (click)="onPersonalAssessment(2)">
+                        <i class="icon-emo-unhappy"></i>
+                    </button>
+                </div>
+                
+            </div>
+
+            <div class="edit-table__title">
+                <span>Abstract</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <app-custom-textarea [(value)]="movie.abstract!" [appPlaceholder]="abstractInputPlaceholder">
+                    </app-custom-textarea>
+                </div>
+            </div>
+
+            <div class="edit-table__title">
+                <span>Slogan</span>
+            </div>
+            <div class="edit-table__value">
+                <div class="edit-table__value__cont">
+                    <app-custom-textarea [(value)]="movie.slogan!" [appPlaceholder]="sloganInputPlaceholder">
+                    </app-custom-textarea>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="app-movies-page-edit-form__footer">
+        <button class="action-button" (click)="closeForm(appEventsEnum.CLOSE)">Close</button>
+        <button class="action-button" (click)="isValid() && submit()" [ngClass]="{'disabled': !isValid()}">{{id ? 'Save' : 'Add'}}</button>
+    </div>
+    
+</div>

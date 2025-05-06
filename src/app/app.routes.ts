@@ -1,7 +1,10 @@
 import { Routes } from '@angular/router';
-import { MoviesPageComponent } from './pages/movies-page/movies-page.component';
 
 export const routes: Routes = [
-    {path: '', component: MoviesPageComponent},
-    {path: '**', redirectTo: '/'}
+    { path: '', redirectTo: '/movies', pathMatch: 'full'},
+    { 
+        path: 'movies',
+        loadChildren: () => import('./features/movies').then(m => m.MOVIES_PAGE_ROUTES)
+    },
+    { path: '**', redirectTo: '/' }
 ];

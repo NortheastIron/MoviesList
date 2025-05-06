@@ -1,0 +1,1 @@
+export { MOVIES_PAGE_ROUTES } from './movies-page.routes';
