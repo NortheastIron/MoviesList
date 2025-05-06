@@ -29,6 +29,7 @@ CustomInput\CustomRange\CustomTextArea ...:
 
 Задачи на будущее:
 
+0. signals
 1. изменение shared/components под Forms    
 2. Хранение состояния
 3. отдельная страница для movies-details
@@ -42,5 +43,3 @@ CustomInput\CustomRange\CustomTextArea ...:
 12. MainHeader ... управление страницей, навигация.
 
 # посмотреть места с //exp
-
-// изменена структура проекта, убрано ssr , доработана часть Observable ... фильтры в целом работают но внести мелкие изменения
