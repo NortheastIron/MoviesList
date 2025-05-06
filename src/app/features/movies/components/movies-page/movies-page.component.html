@@ -3,9 +3,9 @@
     <div class="app-movies-page__buttons">
         <!-- need validation or disabled -->
         <button class="action-button"
-                [class.disabled]="isLoading$ | async"
+                [class.disabled]="isLoading"
                 (click)="openAddUpdateItemForm()">
-            Add Movie {{isLoading$ | async}}
+            Add Movie
         </button>
         <button class="action-button" (click)="isFilters = !isFilters">
             Filters<i class="icon" [ngClass]="{'icon-down-open': !isFilters, 'icon-up-open': isFilters}"></i>
@@ -47,7 +47,7 @@
             </div>
     </div>
     <!-- list -->
-    <div class="app-movies-page__list" [ngClass]="{'loading': isLoading$ | async}">
+    <div class="app-movies-page__list" [class.disabled]="isLoading">
         <div class="app-movies-page__list__item" *ngFor="let movie of movies$ | async">
             <app-movies-page-item  [movie]="movie" (appEvents)="receiveItemEvents($event)"></app-movies-page-item>
         </div>

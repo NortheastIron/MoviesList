@@ -6,7 +6,7 @@ import { AppEvents, TAppEvents } from '@core';
 import { ClickOutsideDirective } from '@shared/directives';
 import { PopupComponent } from '@shared/components/popup';
 import { CalendarEvents } from '@shared/components/datepicker/enums';
-import { getISOWeekNumber } from '@core/utils/iso-week.util';
+import { getISOWeekNumber } from '@core/utils';
 import { TCalendarEventParams } from '@shared/components/datepicker/models/calendar-event-params.type';
 import { DatePickerTypes } from '@shared/components/datepicker';
 import { TCalendarHeaderElement } from '@shared/components/datepicker/models/calendar-header-element.type';
@@ -130,7 +130,7 @@ export class DatepickerComponent implements OnDestroy {
     const result = date instanceof Date
       ? this.type === DatePickerTypes.year
         ? `${date.getFullYear()}`
-        : `${date.getFullYear()}/${String(date.getMonth()).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
+        : `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
       : date;
 
     this.inputText = result;

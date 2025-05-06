@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Observable, Subject, finalize, takeUntil } from 'rxjs';
+
 import { AppEvents, ModalService, TAppEvents, TDict, typedFastCopy } from '@core';
 import {
   CustomInputComponent,
@@ -30,6 +32,10 @@ import { GENRES_DICT } from '@features/movies/constants';
   styleUrl: './movies-page.edit-form.component.less'
 })
 export class MoviesPageEditFormComponent implements OnInit {
+
+  @Input() id?: number;
+  @Output() appEvents = new EventEmitter<TAppEvents>();
+
   protected isLoading: boolean = false;
   protected movie: Partial<TMovie> = this._getDefaultMovie();
   protected datePickerTypesEnum = DatePickerTypes;
@@ -42,16 +48,18 @@ export class MoviesPageEditFormComponent implements OnInit {
   protected abstractInputPlaceholder: string = 'Input abstract ...';
   protected sloganInputPlaceholder: string = 'Input slogan ...';
   protected genres: TDict[] = GENRES_DICT;
-
-
-
-  @Input() id?: number;
-  @Output() appEvents = new EventEmitter<TAppEvents>();
+  // protected isLoading = false;
+  private _destroy$: Subject<void> = new Subject<void>();
 
   constructor(private _moviesService: MoviesService, private _modalService: ModalService) {}
 
   public ngOnInit(): void {
     this._initMovie();
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   // пока что временно сделал без реактивной формы
@@ -69,18 +77,21 @@ export class MoviesPageEditFormComponent implements OnInit {
     this.isLoading = true;
     const data: Partial<TMovie> = typedFastCopy(this.movie);
 
-    let promise: Promise<TMovie>;
+    let req: Observable<boolean>;
     if (this.id) {
-      promise = this._moviesService.update(this.id, data);
+      req = this._moviesService.update(this.id, data);
     } else {
-      promise = this._moviesService.add(data);
+      req = this._moviesService.add(data);
     }
 
-    promise.then((_res) => {
-      this.closeForm(AppEvents.UPDATE)
-    }).catch((_err) => {
-      //тут можно вызвать окно с ошибкой
-      this.isLoading = false;
+    req.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe((success: boolean) => {
+      if (success) {
+        this.closeForm(AppEvents.CLOSE);
+      } else {
+        this.isLoading = false;
+      }
     });
   }
 
@@ -108,22 +119,24 @@ export class MoviesPageEditFormComponent implements OnInit {
     this.movie.actors?.splice(index, 1);
   }
 
-  private async _initMovie(): Promise<void> {
-    this.isLoading = true;
-
+  private _initMovie(): void {
     if (this.id) {
-        await this._load();
-    }
-    this.isLoading = false;
-  }
-
-  private _load(): Promise<void> {
-    return this._moviesService.get(this.id!).then((result: TMovie) => {
-        this.movie = {...result};
-        if (!this.movie.actors?.length) {
-          this.movie.actors = [''];
+      this.isLoading = true;
+      this._moviesService.get(this.id).pipe(
+        
+        takeUntil(this._destroy$),
+        finalize(() => {
+          this.isLoading = false
+        }),
+      ).subscribe((movie) => {
+        if (movie) {
+          this.movie = {...movie};
+          if (!this.movie.actors?.length) {
+            this.movie.actors = [''];
+          }
         }
-    });
+      });
+    }
   }
 
   private _getDefaultMovie(): Partial<TMovie> {

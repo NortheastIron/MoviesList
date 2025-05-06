@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject, finalize, takeUntil } from 'rxjs';
 
 import { AppEvents, ModalService, TAppEvents, TDict } from '@core';
 import {
@@ -17,6 +18,7 @@ import { TFormState, TPageFilters } from './models';
 import { MoviesPageEditFormComponent } from './edit-form';
 import { MoviesPageItemComponent } from './item';
 
+
 @Component({
   selector: 'app-movies-page',
   standalone: true,
@@ -33,8 +35,7 @@ import { MoviesPageItemComponent } from './item';
   styleUrl: './movies-page.component.less',
   providers: [MoviesService]
 })
-export class MoviesPageComponent implements OnInit, OnDestroy {
-  protected loading: boolean = true;
+export class MoviesPageComponent implements OnInit, OnDestroy, AfterViewInit {
   protected movies: TMovie[] = [];
   protected isFilters: boolean = false;
   protected filters: TPageFilters = {
@@ -47,59 +48,33 @@ export class MoviesPageComponent implements OnInit, OnDestroy {
     genre: ''
   };
   protected formState: TFormState | null = null;
-  // protected isformVisible: boolean = false;
   protected datePickerTypesEnum = DatePickerTypes;
 
   protected datePicCreateYearPlaceholder: string = 'Select year of creation...';
   protected datePicAddUpPlaceholder: string = 'Select date added or up...';
   protected selectGenrePlaceholder: string = 'Select genre...';
+  protected isLoading: boolean = true;
 
   protected movies$ = this._moviesService.movies$;
-  protected isLoading$ = this._moviesService.isLoading$;
   protected isVisibleModal$ = this._modalService.isVisible$;
 
-  // private _modalSubscription: Subscription | undefined;
-  // private destroy$ = new Subject<void>(); //отписаться от потока в takeUntil
-
-  // private _subs: Subscription = new Subscription();
-
+  private _destroy$ = new Subject<void>(); //отписаться от потока в takeUntil
 // задаю прямо, по хорошему нужно получать список жанров с бека учитывая сущестующие значения 
   protected genres: TDict[] = GENRES_DICT;
 
-  constructor(private _moviesService: MoviesService, private readonly _modalService: ModalService) {
-    console.log('mov page constr');
-  }
+  constructor(private _moviesService: MoviesService, private readonly _modalService: ModalService) {}
 
   public ngOnDestroy(): void {
-    // this.destroy$.next();
-    // this.destroy$.complete();
-    // this._modalSubscription?.unsubscribe();
-    // this._subs.unsubscribe();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public ngOnInit(): void {
-    console.log('mov page ngoninit');
-    // this.loading = true;
-    //т.к. бэк не прикручен, жду файл а потом работаю с массивом
-    // this._moviesService.testHttp().subscribe({
-    //   next: movies => {
-    //     console.log('mov', movies);
-    //   },
-    //   error: () => {
-    //     console.log('err');
-    //   }
-    // });
-    // this._moviesService.init().then(() => {
-    //   this._load();
-    // });
+    this._loadMovies();
+  }
 
-    // this._subs.add(
-    //   this._modalService.isVisible$.subscribe({
-    //     next: (value: boolean) => {
-    //       this.isformVisible = value;
-    //     }
-    //   })
-    // );
+  public ngAfterViewInit(): void {
+    this._setFilters();
   }
 
   // TAppEvents ... решение в лоб ... по хорошему нужно сделать сервис
@@ -107,29 +82,33 @@ export class MoviesPageComponent implements OnInit, OnDestroy {
   protected receiveItemEvents(event: TAppEvents) {
     if (event.type === AppEvents.EDIT && event.value) {
       this.openAddUpdateItemForm(event.value);
-    } else if (event.type === AppEvents.UPDATE) {
-      this._load();
     }
   }
 
   protected inputSearchEvents(event: TAppEvents) {
     if (event.type === AppEvents.SEARCH) {
       if (Object.prototype.hasOwnProperty.call(event , 'value')) {
-        this.filters.inputSearch.searchVal = event.value;
+        this.filters = {
+          ...this.filters,
+          inputSearch: {
+            ...this.filters.inputSearch,
+            searchVal: event.value
+          }
+        };
       }
-      this._load();
+      this._setFilters();
     }
   }
 
   protected selectedEvents(event: TAppEvents) {
     if (event.type === AppEvents.SELECTED) {
-      this._load();
+      this._setFilters();
     }
   }
 
   protected calendarEvents(event: TAppEvents) {
     if (event.type === AppEvents.SELECTED) {
-      this._load();
+      this._setFilters();
     }
   }
 
@@ -138,6 +117,7 @@ export class MoviesPageComponent implements OnInit, OnDestroy {
       id: id,
       title: id ? 'Edit movie' : 'Add movie'
     };
+
     this._modalService.open();
   }
 
@@ -154,18 +134,17 @@ export class MoviesPageComponent implements OnInit, OnDestroy {
   protected editFormEventsHandler(event: TAppEvents): void {
     if (event.type === AppEvents.CLOSE) {
       this.closeAddUpdateItemForm();
-    } else if (event.type === AppEvents.UPDATE) {
-      this.closeAddUpdateItemForm();
-      this._load();
     }
   }
 
-  private _load(): void {
-    this.loading = true;
-    this._moviesService.list({filters: this.filters}).then((list: TMovie[]) => {
-      this.movies = list;
-    }).finally(() => {
-      this.loading = false;
-    });
+  private _loadMovies(): void {
+    this._moviesService.list().pipe(
+      finalize(() => this.isLoading = false),
+      takeUntil(this._destroy$)
+    ).subscribe();
+  }
+
+  private _setFilters(): void {
+    this._moviesService.setFilters({...this.filters});
   }
 }

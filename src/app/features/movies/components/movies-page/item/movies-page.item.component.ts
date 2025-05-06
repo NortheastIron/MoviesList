@@ -19,9 +19,7 @@ export class MoviesPageItemComponent implements OnDestroy {
   protected isDetails: boolean = false;
   private _destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private _moviesService: MoviesService) {
-
-  }
+  constructor(private _moviesService: MoviesService) {}
 
   public ngOnDestroy(): void {
     this._destroy$.next();
@@ -37,11 +35,8 @@ export class MoviesPageItemComponent implements OnDestroy {
   }
 
   protected onDelete(): void {
-    this._moviesService.removeMovie(this.movie.id).pipe(
+    this._moviesService.remove(this.movie.id).pipe(
       takeUntil(this._destroy$)
     ).subscribe();
-    // this._moviesService.remove(this.movie.id).then(() => {
-    //   this.appEvents.emit({type: AppEvents.UPDATE});
-    // });
   }
 }

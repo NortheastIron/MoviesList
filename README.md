@@ -29,7 +29,7 @@ CustomInput\CustomRange\CustomTextArea ...:
 
 Задачи на будущее:
 
-1. изменение shared/components под Forms
+1. изменение shared/components под Forms    
 2. Хранение состояния
 3. отдельная страница для movies-details
 4. работа с изображением
@@ -43,14 +43,4 @@ CustomInput\CustomRange\CustomTextArea ...:
 
 # посмотреть места с //exp
 
-
-# великий рефакт
-// готово 
-//// core
-//// shared
-//// feature/movies
-////// models
-////// services
-////// 
-
-разобраться со структурой features
+// изменена структура проекта, убрано ssr , доработана часть Observable ... фильтры в целом работают но внести мелкие изменения
